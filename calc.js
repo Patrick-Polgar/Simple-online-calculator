@@ -6,6 +6,7 @@ document.getElementById("answer").readOnly = true; //set this attribute in Html 
 let screen = document.getElementById("answer");
 buttons = document.querySelectorAll("button");
 let screenValue = "";
+let screenValueWithCorrectFunction = "";
 for (item of buttons) {
     item.addEventListener("click", (e) => {
         buttonText = e.target.innerText;
@@ -13,12 +14,31 @@ for (item of buttons) {
             buttonText = "*";
             screenValue += buttonText;
             screen.value = screenValue;
-        } else if (buttonText == "C") {
+        }else if (buttonText == "^") {
+            buttonText = "^(";
+            screenValue += buttonText;
+            screen.value = screenValue;
+        }else if (buttonText == "√") {
+            buttonText = "√(";
+            screenValue += buttonText;
+            screen.value = screenValue;
+        }else if (buttonText == "π") {
+            buttonText = "π";
+            screenValue += buttonText;
+            screen.value = screenValue;
+        }else if (buttonText == "ln") {
+            buttonText = "ln(";
+            screenValue += buttonText;
+            screen.value = screenValue;
+        }else if (buttonText == "C") {
             screenValue = "";
             screen.value = screenValue;
-        } else if (buttonText == "=") {
-            checkForBracketMulti(); // automatically evaluates if no brackets
-        } else {
+        }else if (buttonText == "=") {
+            checkForBracketMulti();   // automatically evaluates if no brackets
+        }else if (buttonText == "DEL") {
+            screenValue = screenValue.slice(0,-1);
+            screen.value = screenValue;
+        }else {
             screenValue += buttonText;
             screen.value = screenValue;
         }
@@ -70,6 +90,8 @@ document.addEventListener("keydown", function (event) {
     }
 });
 
+
+
 window.onerror = function () {
     alert("PLEASE INPUT VALID EXPRESSION");
     screenValue = "";
@@ -79,7 +101,8 @@ window.onerror = function () {
 
 window.onBracketMultiplication = function () {
     screenValue = addStr(screen.value, screen.value.indexOf("("), "*");
-    screen.value = eval(screenValue);
+    screenValueWithCorrectFunction = screenValue.replace(/√/g,"Math.sqrt").replace(/ln/g,"Math.log").replace(/π/g,"Math.PI").replace("^","**");
+    screen.value = eval(screenValueWithCorrectFunction);
 };
 
 function addStr(str, index, stringToAdd) {
@@ -97,6 +120,7 @@ function checkForBracketMulti() {
         window.onBracketMultiplication();
         return;
     } else {
-        screen.value = eval(screenValue);
+        screenValueWithCorrectFunction = screenValue.replace(/√/g,"Math.sqrt").replace(/ln/g,"Math.log").replace(/π/g,"Math.PI").replace("^","**");
+        screen.value = eval(screenValueWithCorrectFunction);
     }
 }
